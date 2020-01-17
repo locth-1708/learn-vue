@@ -1,17 +1,24 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <AddTodo />
+    <div class='containerTab'>
+      <router-link to="/listNew">listNew</router-link>
+      <router-link to="/listInprogress">listInprogress</router-link>
+      <router-link to="/listDone">listDone</router-link>
+    </div>
+    <div>
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import AddTodo from './components/AddTodo.vue'
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    AddTodo,
   }
 }
 </script>
