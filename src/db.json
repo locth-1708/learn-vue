@@ -1,0 +1,60 @@
+{
+  "listNew": [
+    {
+      "value": "viêm phổi",
+      "id": 9
+    },
+    {
+      "value": "hắt xì hơi",
+      "id": 11
+    },
+    {
+      "value": "suy hô hấp",
+      "id": 13
+    },
+    {
+      "value": "WHO đã xếp Coronoa là đại dịch cấp độ A",
+      "id": 19
+    },
+    {
+      "value": "ngày 31/1/2020, đã có hơn 9000 nhiễm bệnh",
+      "id": 20
+    }
+  ],
+  "listInprogress": [
+    {
+      "value": "aasdasfsaf",
+      "id": 4
+    },
+    {
+      "value": "aaaa",
+      "id": 6
+    },
+    {
+      "value": "Virus coronoa",
+      "id": 7
+    },
+    {
+      "value": "ủ bệnh trong tối đa 14 ngày",
+      "id": 8
+    },
+    {
+      "value": "tập thể dục",
+      "id": 9
+    },
+    {
+      "value": "ngủ nghỉ đầy đủ",
+      "id": 10
+    },
+    {
+      "value": "cung cấp Vitamin C",
+      "id": 11
+    }
+  ],
+  "listDone": [
+    {
+      "value": "đi ngủ nào, ahihi",
+      "id": 1
+    }
+  ]
+}

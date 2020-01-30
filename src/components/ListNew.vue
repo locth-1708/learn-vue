@@ -1,39 +1,42 @@
 <template>
   <div>
-    <div v-for='(item, index) in listNew' :key="item" class='listItem'>
-      <p v-show='indexItemEdited !== index'>{{item}}</p>
+    <div v-for='(item, index) in listNew' :key="index" class='list-item'>
+      <p v-show='indexItemEdited !== index' @click='toggleEdit(index)'>{{item.value}}</p>
       <input
-        class="inputEdit"
+        class="list-item__input"
         type="text"
         v-show='indexItemEdited === index' 
-        :placeholder='item'
+        :placeholder='item.value'
         v-model='item.index'
-        @blur='saveEdit("listNew", $item[index], index)'
+        @keyup.enter="e => cancelEdit(e, item.id)"
+        @keyup.esc="toggleEdit(-1)"
       />
-      <div class='buttonSection'>
-        <button 
-          v-show='indexItemEdited !== index'
-          @click='toggleEdit(index)'
-        >
-          Sửa
-        </button>
+      <div class='list-item__button'>
         <button
-          v-show='indexItemEdited === index'
-          @click='toggleEdit(index), saveEdit("listNew", item, index)'
-        >
-          Lưu
-        </button>
-        <button
-          @click='transferTask("listNew", "listInprogress", index)'
+          @click='transferTask({
+            currentList: "listNew",
+            nextList: "listInprogress",
+            id: item.id
+          })'
         >Làm</button>
-        <button v-on:click='deleteTask("listNew", index)' >Xóa</button>
+        <button
+          @click='deleteTask({
+            currentList: "listNew",
+            id: item.id
+          })'
+        >Xóa</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import stores from '../stores';
+/* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
+import { mapActions, mapState } from 'vuex'
+import { mutationConstant, moduleConstant } from '../constant';
+import * as API from '../service';
+
 export default {
   name: 'ListNew',
   data: function() {
@@ -42,62 +45,42 @@ export default {
       item: '',
     };
   },
+  created() {
+    this.getListData('listNew');
+  },
   computed: {
-    listNew() {
-      return stores.state.listNew;
-    }
+    ...mapState(['listNew']),
   },
   methods: {
+    ...mapActions([
+      'getListData',
+      'transferTask',
+      'deleteTask',
+    ]),
+    ...mapActions({
+      saveEdit: `${moduleConstant.LIST_NEW}/${mutationConstant.SAVE_EDIT}`,
+    }),
     toggleEdit: function (index) {
       if(this.indexItemEdited === index) {
         return this.indexItemEdited = -1;
       }
       return this.indexItemEdited = index;
     },
-    deleteTask: function (listType, index) {
-      stores.commit('deleteTask', {listType, index})
+    cancelEdit (e, id) {
+      if(e.target.value.trim()) {
+        this.saveEdit({id, value: e.target.value.trim()})
+        this.indexItemEdited = -1
+      }
     },
-    saveEdit: function (listType, value, index) {
-      stores.commit('saveEdit', {listType, value, index})
-    },
-    transferTask: function (currentList, nextList, index) {
-      stores.commit('transferTask', {currentList, nextList, index})
-    }
-  }
+  },
 }
 </script>
 
-<style scoped>
-.listItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  padding-left: 16px;
-  margin-bottom: 2px;
-  font-size: 16px;
-  background: #4267b2;
-  color: #fff;
-}
-.listItem:last-child {
-  border-radius: 0 0 10px 10px;
-  margin-bottom: 0;
-}
-.inputEdit {
+<style scoped lang="scss">
+.list-item__input {
   padding: 2.5px 10px;
   font-size: 16px;
   color: #4267b2;
   background: #ffffff;
-}
-.buttonSection {
-  background: transparent;
-}
-.buttonSection > button {
-  color: #4267b2;
-  font-weight: bold;
-  margin-right: 10px;
-  background: #ffffff;
-  border: none;
-  padding: 5px 10px;
 }
 </style>

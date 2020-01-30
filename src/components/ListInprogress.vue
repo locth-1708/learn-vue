@@ -1,62 +1,43 @@
 <template>
   <div>
-    <div v-for='(item, index) in listInprogress' :key="item" class='listItem'>
-      <p>{{item}}</p>
-      <div class='buttonSection'>
+    <div v-for='(item, index) in listInprogress' :key="index" class='list-item'>
+      <p>{{item.value}}</p>
+      <div class='list-item__button'>
         <button
-          @click='transferTask("listInprogress", "listDone", index)'
+          @click='transferTask({
+            currentList: "listInprogress",
+            nextList: "listDone",
+            id: item.id
+          })'
         >Hoàn thành</button>
-        <button v-on:click='deleteTask("listInprogress", index)' >Xóa</button>
+        <button
+          @click='deleteTask({
+            currentList: "listInprogress",
+            id: item.id
+          })'
+        >Xóa</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import stores from '../stores';
+import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'ListInprogress',
+  created() {
+    this.getListData('listInprogress');
+  },
   computed: {
-    listInprogress() {
-      return stores.state.listInprogress;
-    }
+    ...mapState(['listInprogress'])
   },
   methods: {
-    deleteTask (listType, index) {
-      stores.commit('deleteTask', {listType, index})
-    },
-    transferTask (currentList, nextList, index) {
-      stores.commit('transferTask', {currentList, nextList, index})
-    }
+    ...mapActions([
+      'getListData',
+      'transferTask',
+      'deleteTask',
+    ]),
   }
 }
 </script>
-
-<style scoped>
-.listItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  padding-left: 16px;
-  margin-bottom: 2px;
-  font-size: 16px;
-  background: #4267b2;
-  color: #fff;
-}
-.listItem:last-child {
-  border-radius: 0 0 10px 10px;
-  margin-bottom: 0;
-}
-.buttonSection {
-  background: transparent;
-}
-.buttonSection > button {
-  color: #4267b2;
-  font-weight: bold;
-  margin-right: 10px;
-  background: #ffffff;
-  border: none;
-  padding: 5px 10px;
-}
-</style>
