@@ -1,41 +1,46 @@
 <template>
   <div class="container">
     <input
-      id='inputNew'
       placeholder="Công việc muốn thêm"
       v-model="inputNew"
-      @keydown.enter='addNew(inputNew)'
+      @keydown.enter='addNewTask(inputNew)'
     />
     <button
-      v-on:click='addNew(inputNew)'
+      @click='addNewTask(inputNew)'
     >Thêm vào</button>
   </div>
 </template>
 
 <script>
-import stores from '../stores';
+import { mutationConstant, moduleConstant} from '../constant';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'AddTodo',
   methods: {
-    addNew (value) {
-      stores.commit('addNew', {value})
-      this.inputNew = ''
-    },
+    ...mapActions({
+      addNew: `${moduleConstant.ADD_TODO}/${mutationConstant.ADD_NEW}`
+    }),
+    addNewTask (value) {
+      if (value.trim()) {
+        this.addNew(value.trim());
+        this.inputNew = ''
+      }
+    }
   },
   data: function() {
     return {
       inputNew: '',
     }
-  }
+  },
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .container {
   display: flex;
   flex-direction: row;
-  width: 500px;
+  width: 600px;
 }
 input {
   padding: 0 10px;
